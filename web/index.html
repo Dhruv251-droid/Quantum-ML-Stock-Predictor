@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum ML Stock Predictor — GAN-based Financial Forecasting</title>
+    <meta name="description" content="Stock price prediction using Classical GAN, Hybrid Quantum GAN, and Fully Quantum GAN architectures built with PyTorch and PennyLane.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Particle Canvas Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <span class="logo-icon">⚛</span>
+                <span class="logo-text">Quantum<span class="accent">ML</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="#models" class="nav-link">Models</a>
+                <a href="#predictions" class="nav-link">Predictions</a>
+                <a href="#metrics" class="nav-link">Metrics</a>
+                <a href="#architecture" class="nav-link">Architecture</a>
+                <a href="https://github.com/dhruvr4i" target="_blank" class="nav-link nav-github">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Research Project — Quantum Machine Learning
+            </div>
+            <h1 class="hero-title">
+                <span class="title-line">Quantum ML</span>
+                <span class="title-line gradient-text">Stock Predictor</span>
+            </h1>
+            <p class="hero-subtitle">
+                Predicting FTSE stock prices using <strong>Classical GAN</strong>, <strong>Hybrid Quantum GAN</strong>, 
+                and <strong>Fully Quantum GAN</strong> architectures — combining deep learning with quantum computing 
+                for next-generation financial forecasting.
+            </p>
+            <div class="hero-actions">
+                <a href="#predictions" class="btn btn-primary">
+                    <span>View Predictions</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+                </a>
+                <a href="https://github.com/dhruvr4i" target="_blank" class="btn btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <span>Source Code</span>
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-value">3</span>
+                    <span class="stat-label">GAN Models</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-value">FTSE</span>
+                    <span class="stat-label">Stock Index</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-value">Quantum</span>
+                    <span class="stat-label">Computing</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll-indicator">
+            <span>Scroll to explore</span>
+            <div class="scroll-line"></div>
+        </div>
+    </header>
+
+    <!-- Models Overview Section -->
+    <section id="models" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">01 / Models</span>
+                <h2 class="section-title">Three Approaches to<br><span class="gradient-text">Stock Prediction</span></h2>
+                <p class="section-desc">Comparing classical deep learning with quantum-classical hybrid and fully quantum architectures for time-series forecasting.</p>
+            </div>
+            <div class="models-grid">
+                <!-- Classical GAN -->
+                <div class="model-card" data-model="classical">
+                    <div class="card-glow"></div>
+                    <div class="card-header">
+                        <div class="card-icon classical-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><path d="M10 6.5h4M6.5 10v4M17.5 10v4M10 17.5h4"/></svg>
+                        </div>
+                        <span class="card-badge">Classical</span>
+                    </div>
+                    <h3 class="card-title">Classical GAN</h3>
+                    <p class="card-desc">LSTM-based Generator with MLP Discriminator. Uses sequential pattern recognition for time-series forecasting with adversarial training.</p>
+                    <div class="card-specs">
+                        <div class="spec">
+                            <span class="spec-label">Generator</span>
+                            <span class="spec-value">LSTM (2-layer, 64 hidden)</span>
+                        </div>
+                        <div class="spec">
+                            <span class="spec-label">Discriminator</span>
+                            <span class="spec-value">MLP (64→32→1)</span>
+                        </div>
+                        <div class="spec">
+                            <span class="spec-label">Training</span>
+                            <span class="spec-value">50 epochs, BCELoss</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hybrid Quantum GAN -->
+                <div class="model-card featured" data-model="hybrid">
+                    <div class="card-glow"></div>
+                    <div class="card-header">
+                        <div class="card-icon hybrid-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+                        </div>
+                        <span class="card-badge accent-badge">Hybrid Quantum</span>
+                    </div>
+                    <h3 class="card-title">Hybrid QGAN</h3>
+                    <p class="card-desc">Quantum circuit generator with classical discriminator. RY encoding and parameterized Rot gates with entangling CNOT layers.</p>
+                    <div class="card-specs">
+                        <div class="spec">
+                            <span class="spec-label">Generator</span>
+                            <span class="spec-value">Quantum Circuit (3 qubits)</span>
+                        </div>
+                        <div class="spec">
+                            <span class="spec-label">Discriminator</span>
+                            <span class="spec-value">Classical MLP</span>
+                        </div>
+                        <div class="spec">
+                            <span class="spec-label">Diff Method</span>
+                            <span class="spec-value">Parameter-Shift Rule</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fully Quantum GAN -->
+                <div class="model-card" data-model="fqgan">
+                    <div class="card-glow"></div>
+                    <div class="card-header">
+                        <div class="card-icon fqgan-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+                        </div>
+                        <span class="card-badge quantum-badge">Fully Quantum</span>
+                    </div>
+                    <h3 class="card-title">Fully Quantum GAN</h3>
+                    <p class="card-desc">End-to-end quantum architecture using SWAP test for discrimination. Amplitude encoding with quantum state overlap measurement.</p>
+                    <div class="card-specs">
+                        <div class="spec">
+                            <span class="spec-label">Architecture</span>
+                            <span class="spec-value">CSWAP + Hadamard Test</span>
+                        </div>
+                        <div class="spec">
+                            <span class="spec-label">Qubits</span>
+                            <span class="spec-value">5 total (2 gen + 2 real + ancilla)</span>
+                        </div>
+                        <div class="spec">
+                            <span class="spec-label">Encoding</span>
+                            <span class="spec-value">Amplitude Embedding</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Predictions Section -->
+    <section id="predictions" class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">02 / Results</span>
+                <h2 class="section-title">Prediction <span class="gradient-text">Performance</span></h2>
+                <p class="section-desc">Actual vs. predicted FTSE stock prices on the test set — comparing how each architecture captures market trends.</p>
+            </div>
+            <div class="chart-tabs">
+                <button class="chart-tab active" data-chart="classical">Classical GAN</button>
+                <button class="chart-tab" data-chart="hybrid">Hybrid QGAN</button>
+                <button class="chart-tab" data-chart="fqgan">Fully Quantum GAN</button>
+                <button class="chart-tab" data-chart="all">Compare All</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="prediction-chart"></canvas>
+            </div>
+            <div class="chart-insight" id="chart-insight">
+                <div class="insight-icon">💡</div>
+                <p id="insight-text">The Classical GAN achieves the closest tracking of actual FTSE prices, demonstrating LSTM's strength in sequential pattern recognition.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section id="metrics" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">03 / Metrics</span>
+                <h2 class="section-title">Quantitative <span class="gradient-text">Evaluation</span></h2>
+                <p class="section-desc">Model performance measured using standard regression metrics across the FTSE test dataset.</p>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card" id="metric-rmse">
+                    <div class="metric-header">
+                        <h4 class="metric-name">RMSE</h4>
+                        <span class="metric-info" title="Root Mean Square Error — lower is better">ⓘ</span>
+                    </div>
+                    <p class="metric-desc">Root Mean Square Error</p>
+                    <div class="metric-bars">
+                        <div class="metric-bar-row">
+                            <span class="bar-label">Classical</span>
+                            <div class="bar-track"><div class="bar-fill classical-fill" style="--target-width: 35%"></div></div>
+                            <span class="bar-value">~120</span>
+                        </div>
+                        <div class="metric-bar-row">
+                            <span class="bar-label">Hybrid</span>
+                            <div class="bar-track"><div class="bar-fill hybrid-fill" style="--target-width: 65%"></div></div>
+                            <span class="bar-value">~400</span>
+                        </div>
+                        <div class="metric-bar-row">
+                            <span class="bar-label">FQGAN</span>
+                            <div class="bar-track"><div class="bar-fill fqgan-fill" style="--target-width: 20%"></div></div>
+                            <span class="bar-value">~60</span>
+                        </div>
+                    </div>
+                    <span class="metric-best">↓ Lower is better</span>
+                </div>
+
+                <div class="metric-card" id="metric-mae">
+                    <div class="metric-header">
+                        <h4 class="metric-name">MAE</h4>
+                        <span class="metric-info" title="Mean Absolute Error — lower is better">ⓘ</span>
+                    </div>
+                    <p class="metric-desc">Mean Absolute Error</p>
+                    <div class="metric-bars">
+                        <div class="metric-bar-row">
+                            <span class="bar-label">Classical</span>
+                            <div class="bar-track"><div class="bar-fill classical-fill" style="--target-width: 40%"></div></div>
+                            <span class="bar-value">~100</span>
+                        </div>
+                        <div class="metric-bar-row">
+                            <span class="bar-label">Hybrid</span>
+                            <div class="bar-track"><div class="bar-fill hybrid-fill" style="--target-width: 70%"></div></div>
+                            <span class="bar-value">~370</span>
+                        </div>
+                        <div class="metric-bar-row">
+                            <span class="bar-label">FQGAN</span>
+                            <div class="bar-track"><div class="bar-fill fqgan-fill" style="--target-width: 18%"></div></div>
+                            <span class="bar-value">~45</span>
+                        </div>
+                    </div>
+                    <span class="metric-best">↓ Lower is better</span>
+                </div>
+
+                <div class="metric-card" id="metric-r2">
+                    <div class="metric-header">
+                        <h4 class="metric-name">R² Score</h4>
+                        <span class="metric-info" title="Coefficient of Determination — closer to 1 is better">ⓘ</span>
+                    </div>
+                    <p class="metric-desc">Coefficient of Determination</p>
+                    <div class="metric-bars">
+                        <div class="metric-bar-row">
+                            <span class="bar-label">Classical</span>
+                            <div class="bar-track"><div class="bar-fill classical-fill" style="--target-width: 72%"></div></div>
+                            <span class="bar-value">0.72</span>
+                        </div>
+                        <div class="metric-bar-row">
+                            <span class="bar-label">Hybrid</span>
+                            <div class="bar-track"><div class="bar-fill hybrid-fill" style="--target-width: 30%"></div></div>
+                            <span class="bar-value">-1.80</span>
+                        </div>
+                        <div class="metric-bar-row">
+                            <span class="bar-label">FQGAN</span>
+                            <div class="bar-track"><div class="bar-fill fqgan-fill" style="--target-width: 88%"></div></div>
+                            <span class="bar-value">0.88</span>
+                        </div>
+                    </div>
+                    <span class="metric-best">↑ Higher is better</span>
+                </div>
+            </div>
+            <div class="metrics-summary">
+                <div class="summary-card">
+                    <div class="summary-icon">🏆</div>
+                    <h4>Key Finding</h4>
+                    <p>The <strong>Fully Quantum GAN</strong> achieves the best overall performance with the highest R² score and lowest errors, 
+                    demonstrating quantum computing's potential in financial time-series prediction. The <strong>Classical GAN</strong> provides strong 
+                    baseline performance, while the <strong>Hybrid QGAN</strong> shows the challenges of quantum-classical optimization.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">04 / Architecture</span>
+                <h2 class="section-title">Technical <span class="gradient-text">Deep Dive</span></h2>
+                <p class="section-desc">End-to-end pipeline from raw FTSE data to stock price predictions.</p>
+            </div>
+            <div class="pipeline">
+                <div class="pipeline-step">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h4>Data Ingestion</h4>
+                        <p>Load FTSE stock prices from CSV. Apply Hodrick-Prescott filter (λ=1600) to extract market trend, removing cyclical noise.</p>
+                        <code>statsmodels.hpfilter → trend extraction</code>
+                    </div>
+                </div>
+                <div class="pipeline-connector"></div>
+                <div class="pipeline-step">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h4>Normalization</h4>
+                        <p>MinMaxScaler scales to [0,1]. Per-sequence L2 normalization ensures quantum state compatibility (unit-norm vectors).</p>
+                        <code>MinMaxScaler → L2 norm per window</code>
+                    </div>
+                </div>
+                <div class="pipeline-connector"></div>
+                <div class="pipeline-step">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h4>Windowing</h4>
+                        <p>Create sliding windows: 3 past time steps → 1 future prediction. 80/20 train-test split for evaluation.</p>
+                        <code>past=3, future=1, split=80%</code>
+                    </div>
+                </div>
+                <div class="pipeline-connector"></div>
+                <div class="pipeline-step">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h4>GAN Training</h4>
+                        <p>Adversarial training with Generator producing predictions and Discriminator distinguishing real from generated sequences.</p>
+                        <code>Adam (β₁=0.5, β₂=0.999)</code>
+                    </div>
+                </div>
+                <div class="pipeline-connector"></div>
+                <div class="pipeline-step">
+                    <div class="step-number">05</div>
+                    <div class="step-content">
+                        <h4>Prediction & Evaluation</h4>
+                        <p>Inverse-transform predictions back to original price scale. Evaluate with RMSE, MAE, and R² metrics.</p>
+                        <code>scaler.inverse_transform → metrics</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section id="tech" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">05 / Technology</span>
+                <h2 class="section-title">Built <span class="gradient-text">With</span></h2>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-icon">🔥</div>
+                    <h4>PyTorch</h4>
+                    <p>Deep learning framework powering Classical GAN and serving as the backbone for quantum integration</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">⚛️</div>
+                    <h4>PennyLane</h4>
+                    <p>Quantum ML library by Xanadu for building and training variational quantum circuits</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">🔢</div>
+                    <h4>NumPy</h4>
+                    <p>Numerical computing for data preprocessing, normalization, and array operations</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">🐼</div>
+                    <h4>Pandas</h4>
+                    <p>Time-series data manipulation and CSV ingestion for FTSE stock data</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">📊</div>
+                    <h4>Scikit-learn</h4>
+                    <p>MinMaxScaler for normalization and evaluation metrics</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">📈</div>
+                    <h4>Statsmodels</h4>
+                    <p>Hodrick-Prescott filter for trend extraction from financial time-series</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span class="footer-logo">⚛ Quantum<span class="accent">ML</span></span>
+                    <p>Stock price prediction using quantum-enhanced generative adversarial networks.</p>
+                </div>
+                <div class="footer-right">
+                    <a href="https://github.com/dhruvr4i" target="_blank" class="footer-link">GitHub</a>
+                    <span class="footer-divider">·</span>
+                    <span class="footer-credit">Built by Dhruv Rai</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Quantum ML Stock Predictor. Research project combining quantum computing with financial ML.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
