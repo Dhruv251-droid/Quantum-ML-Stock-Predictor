@@ -201,14 +201,14 @@ function getChartConfig(type) {
                     titleFont: { family: "'Inter', sans-serif", size: 13, weight: '600' },
                     bodyFont: { family: "'JetBrains Mono', monospace", size: 12 },
                     callbacks: {
-                        title: (items) => `Sample ${items[0].label}`,
+                        title: (items) => `Date: ${items[0].label}`,
                         label: (item) => ` ${item.dataset.label}: ${item.parsed.y.toLocaleString()}`
                     }
                 }
             },
             scales: {
                 x: {
-                    title: { display: true, text: 'Test Sample Index', color: '#555570', font: { size: 12, weight: '500' } },
+                    title: { display: true, text: 'Date', color: '#555570', font: { size: 12, weight: '500' } },
                     ticks: { color: '#555570', font: { size: 11 }, maxTicksLimit: 10 },
                     grid: { color: 'rgba(255, 255, 255, 0.03)', drawBorder: false }
                 },
@@ -288,6 +288,12 @@ function initMetricBars() {
 function updateDynamicMetrics() {
     if (!PREDICTION_DATA || !PREDICTION_DATA.metrics) return;
     
+    // Update live timestamp
+    if (PREDICTION_DATA.last_updated) {
+        const tsElem = document.getElementById('last-updated-text');
+        if (tsElem) tsElem.textContent = `Live Data — Last Updated: ${PREDICTION_DATA.last_updated}`;
+    }
+
     const metrics = PREDICTION_DATA.metrics;
     const models = ['classical', 'hybrid', 'fqgan'];
     

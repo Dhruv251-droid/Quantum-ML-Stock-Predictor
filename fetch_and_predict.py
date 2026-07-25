@@ -98,9 +98,14 @@ def main():
             r2 = float(r2_score(y_true, y_pred))
             return {"rmse": rmse, "mae": mae, "r2": r2}
 
+        # Extract actual dates for the x-axis
+        dates = [d.strftime('%Y-%m-%d') for d in prices.index[-100:]]
+
         # Prepare JSON structure
+        from datetime import datetime
         data = {
-            "labels": list(range(1, 101)),
+            "last_updated": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"),
+            "labels": dates,
             "actual": actual_prices,
             "classical": classical_preds,
             "hybrid": hybrid_preds,
