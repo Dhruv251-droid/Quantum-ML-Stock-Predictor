@@ -90,13 +90,26 @@ def main():
         hybrid_preds = get_predictions("hybrid", X_test, test_norms, scaler)
         fqgan_preds = get_predictions("fqgan", X_test, test_norms, scaler)
         
+        from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+        
+        def calc_metrics(y_true, y_pred):
+            rmse = float(np.sqrt(mean_squared_error(y_true, y_pred)))
+            mae = float(mean_absolute_error(y_true, y_pred))
+            r2 = float(r2_score(y_true, y_pred))
+            return {"rmse": rmse, "mae": mae, "r2": r2}
+
         # Prepare JSON structure
         data = {
             "labels": list(range(1, 101)),
             "actual": actual_prices,
             "classical": classical_preds,
             "hybrid": hybrid_preds,
-            "fqgan": fqgan_preds
+            "fqgan": fqgan_preds,
+            "metrics": {
+                "classical": calc_metrics(actual_prices, classical_preds),
+                "hybrid": calc_metrics(actual_prices, hybrid_preds),
+                "fqgan": calc_metrics(actual_prices, fqgan_preds)
+            }
         }
         
         # Write to JS file

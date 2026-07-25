@@ -284,6 +284,49 @@ function initMetricBars() {
     document.querySelectorAll('.metric-card').forEach(card => observer.observe(card));
 }
 
+// --- Dynamic Metrics Update ---
+function updateDynamicMetrics() {
+    if (!PREDICTION_DATA || !PREDICTION_DATA.metrics) return;
+    
+    const metrics = PREDICTION_DATA.metrics;
+    const models = ['classical', 'hybrid', 'fqgan'];
+    
+    // Calculate max values for bar widths (relative scaling)
+    const maxRmse = Math.max(...models.map(m => metrics[m].rmse));
+    const maxMae = Math.max(...models.map(m => metrics[m].mae));
+    
+    models.forEach(m => {
+        // RMSE Update
+        const rmseCard = document.getElementById('metric-rmse');
+        if (rmseCard) {
+            const row = rmseCard.querySelector(`.bar-fill.${m}-fill`);
+            if (row) row.style.setProperty('--target-width', `${(metrics[m].rmse / maxRmse) * 100}%`);
+            const val = rmseCard.querySelector(`.bar-fill.${m}-fill`).parentElement.nextElementSibling;
+            if (val) val.textContent = metrics[m].rmse.toFixed(1);
+        }
+        
+        // MAE Update
+        const maeCard = document.getElementById('metric-mae');
+        if (maeCard) {
+            const row = maeCard.querySelector(`.bar-fill.${m}-fill`);
+            if (row) row.style.setProperty('--target-width', `${(metrics[m].mae / maxMae) * 100}%`);
+            const val = maeCard.querySelector(`.bar-fill.${m}-fill`).parentElement.nextElementSibling;
+            if (val) val.textContent = metrics[m].mae.toFixed(1);
+        }
+        
+        // R2 Update
+        const r2Card = document.getElementById('metric-r2');
+        if (r2Card) {
+            const row = r2Card.querySelector(`.bar-fill.${m}-fill`);
+            // Map R2 from [-1, 1] to [0%, 100%] approx, or just 0 to 100 for positive
+            let r2Width = Math.max(0, metrics[m].r2 * 100);
+            if (row) row.style.setProperty('--target-width', `${r2Width}%`);
+            const val = r2Card.querySelector(`.bar-fill.${m}-fill`).parentElement.nextElementSibling;
+            if (val) val.textContent = metrics[m].r2.toFixed(3);
+        }
+    });
+}
+
 // --- Smooth Scroll for Anchor Links ---
 function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(link => {
@@ -299,6 +342,7 @@ function initSmoothScroll() {
 
 // --- Initialize Everything ---
 document.addEventListener('DOMContentLoaded', () => {
+    updateDynamicMetrics();
     initParticles();
     initNavbar();
     initChart();
