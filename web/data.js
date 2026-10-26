@@ -1,5 +1,5 @@
 const PREDICTION_DATA = {
-    "last_updated": "2026-10-25 03:01:08 UTC",
+    "last_updated": "2026-10-26 03:00:14 UTC",
     "labels": [
         "2026-06-05",
         "2026-06-08",
